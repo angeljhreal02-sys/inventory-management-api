@@ -1,0 +1,36 @@
+.env
+ │
+ │ Variables de configuración
+ ↓
+
+server.js
+ │
+ │ Inicia aplicación
+ ↓
+
+app.js
+ │
+ │ Configura Express
+ ↓
+
+db.js
+ │
+ │ Conecta MongoDB
+ ↓
+
+models
+ │
+ │ Define datos
+ ↓
+
+controllers
+ │
+ │ Lógica del negocio
+ ↓
+
+routes
+ │
+ │ Endpoints REST
+ ↓
+
+Cliente (Postman / Frontend)
