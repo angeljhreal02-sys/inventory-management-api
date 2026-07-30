@@ -1,0 +1,41 @@
+Cuando se envíe una petición a Postman
+POST
+
+ocurrirá lo siguiente:
+POSTMAN
+
+       │
+
+       ▼
+
+POST /api/products
+
+       │
+
+       ▼
+
+app.js
+
+       │
+
+       ▼
+
+productRoutes.js
+
+       │
+
+       ▼
+
+createProduct()
+
+       │
+
+       ▼
+
+Product.save()
+
+       │
+
+       ▼
+
+MongoDB

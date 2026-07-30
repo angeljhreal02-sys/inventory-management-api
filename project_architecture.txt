@@ -34,3 +34,31 @@ routes
  ↓
 
 Cliente (Postman / Frontend)
+
+
+*** SEGUNDO PLANO DE ARQUITECTURA MÁS CONCRETA: ***
+
+Cliente (Postman)
+
+        │
+        ▼
+
+productRoutes.js
+(Define las rutas)
+
+        │
+        ▼
+
+productController.js
+(Contiene la lógica)
+
+        │
+        ▼
+
+Product.js
+(Modelo de MongoDB)
+
+        │
+        ▼
+
+MongoDB

@@ -1,25 +1,39 @@
 // Importamos Express para crear nuestro servidor API
 const express = require("express");
 
-
 // Permite aceptar peticiones desde otros dominios
-// Ejemplo: un frontend separado consumiendo esta API
 const cors = require("cors");
 
+// Importamos las rutas relacionadas con productos
+const productRoutes = require("./routes/productRoutes");
 
 // Creamos la aplicación Express
 const app = express();
 
-
 // Middleware que permite recibir información en formato JSON
-// Necesario para leer datos enviados desde Postman o Frontend
 app.use(express.json());
 
-
-// Habilita comunicación entre diferentes aplicaciones
+// Habilita la comunicación entre diferentes aplicaciones
 app.use(cors());
 
+/*
+====================================================
+RUTAS PRINCIPALES
+====================================================
+*/
+
+// Todas las rutas de productos comenzarán con:
+/*
+    /api/products
+
+Ejemplos:
+
+POST    /api/products
+GET     /api/products
+PUT     /api/products/:id
+DELETE  /api/products/:id
+*/
+app.use("/api/products", productRoutes);
 
 // Exportamos la configuración de Express
-// server.js será quien levante el servidor
 module.exports = app;
