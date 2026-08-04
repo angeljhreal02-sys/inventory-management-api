@@ -67,14 +67,47 @@ const createProduct = async (req, res) => {
 };
 
 
+/*
+====================================================
+Obtener todos los productos
+Método: GET
+Ruta: /api/products
+====================================================
+*/
+const getProducts = async (req, res) => {
+
+    try {
+
+        // Busca todos los documentos de la colección "products"
+        const products = await Product.find();
+
+        // Responde con código HTTP 200 y la lista de productos
+        res.status(200).json({
+            success: true,
+            total: products.length, // Cantidad de productos encontrados
+            data: products
+        });
+
+    } catch (error) {
+
+        // Si ocurre un error durante la consulta
+        res.status(500).json({
+            success: false,
+            message: "Error al obtener los productos",
+            error: error.message
+        });
+
+    }
+
+};
+
 // Exportamos las funciones del controlador
 // Más adelante agregaremos:
-// getProducts()
 // getProductById()
 // updateProduct()
 // deleteProduct()
 module.exports = {
 
-    createProduct
-
+    createProduct,
+    getProducts
 };

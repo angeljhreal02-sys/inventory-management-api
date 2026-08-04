@@ -23,5 +23,11 @@ RUTAS DEL CRUD
 router.post("/", productController.createProduct);
 
 
+// Obtener todos los productos
+// Método: GET
+// URL: /api/products
+router.get("/", productController.getProducts);
+
+
 // Exportamos el Router para poder utilizarlo en app.js
 module.exports = router;
