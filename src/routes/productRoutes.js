@@ -28,6 +28,20 @@ router.post("/", productController.createProduct);
 // URL: /api/products
 router.get("/", productController.getProducts);
 
+//Obtener productos por su Id (diferenciador unico)
+// Método: GET
+//URL: /api/products
+router.get("/:id", productController.getProductById);  // <-Siempre poner extención de productController primero
+
+//Permite actualizar un producto existente.
+//Método: PUT
+//URL: /api/products
+router.put("/:id", productController.updateProduct);
+
+//Permite eliminar un producto existente.
+//Método: DELETE
+//URL: /api/products
+router.delete("/:id", productController.deleteProduct);
 
 // Exportamos el Router para poder utilizarlo en app.js
 module.exports = router;
