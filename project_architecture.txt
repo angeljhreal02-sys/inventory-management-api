@@ -1,3 +1,4 @@
+
 .env
  │
  │ Variables de configuración
@@ -62,3 +63,28 @@ Product.js
         ▼
 
 MongoDB
+
+
+****TERCER PLANO DE ARQUITECTURA DEL PROYECTO****
+
+
+                  Postman
+                     │
+                     ▼
+             Express / API
+                     │
+                     ▼
+              Controller
+                     │
+          ┌──────────┴──────────┐
+          ▼                     ▼
+      MongoDB              apiService
+                                │
+                                ▼
+                         API externa
+                                │
+                                ▼
+                         Tipo de cambio
+                                │
+                                ▼
+                           USD → MXN

@@ -1,0 +1,42 @@
+*** Traceability ***
+
+CREATE
+│
+├── Recibir datos
+├── Crear documento
+├── Guardar en MongoDB
+└── Responder
+
+
+GET ALL
+│
+├── Consultar MongoDB
+├── Obtener productos
+├── Contar resultados
+└── Responder
+
+
+GET BY ID
+│
+├── Recibir ID
+├── Buscar producto
+├── Verificar existencia
+└── Responder
+
+
+UPDATE
+│
+├── Recibir ID + datos
+├── Buscar producto
+├── Actualizar
+├── Validar resultado
+└── Responder
+
+
+DELETE
+│
+├── Recibir ID
+├── Buscar producto
+├── Eliminar
+├── Verificar resultado
+└── Responder

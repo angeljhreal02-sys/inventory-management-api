@@ -10,11 +10,11 @@ Ruta: /api/products
 */
 //CONTROLADOR createProduct
 const createProduct = async (req, res) => {
-
     try {
+        // 1. Log de inicio e inspección de datos recibidos
+        console.log("📥 [CREATE] Recibiendo datos del cliente:", req.body);
 
         // Extraemos los datos enviados por el cliente
-        // req.body contiene la información enviada desde Postman o un frontend
         const {
             name,
             sku,
@@ -25,8 +25,8 @@ const createProduct = async (req, res) => {
             supplier
         } = req.body;
 
-
-        // Creamos una nueva instancia del modelo Product
+        // 2. Creación de la instancia
+        console.log(" [CREATE] Preparando nuevo producto para:", name);
         const product = new Product({
             name,
             sku,
@@ -37,10 +37,13 @@ const createProduct = async (req, res) => {
             supplier
         });
 
-
-        // Guardamos el producto en MongoDB
+        // 3. Persistencia en base de datos
+        console.log(" [CREATE] Guardando producto en MongoDB...");
         await product.save();
 
+        // 4. Confirmación exitosa
+        console.log(" [CREATE] Producto guardado con éxito. ID:", product._id);
+        console.log(" [CREATE] Enviando respuesta 201 al cliente");
 
         // Respondemos con código 201 (Created)
         res.status(201).json({
@@ -50,20 +53,16 @@ const createProduct = async (req, res) => {
         });
 
     } catch (error) {
+        // 5. Captura y log de errores
+        console.error(" [CREATE] Error al guardar producto:", error.message);
 
         // Si ocurre cualquier error, respondemos con código 500
         res.status(500).json({
-
             success: false,
-
             message: "Error al crear el producto",
-
             error: error.message
-
         });
-
     }
-
 };
 
 //CONTROLADOR getProduct
@@ -101,7 +100,7 @@ const getProducts = async (req, res) => {
 
 };
 
-//CONTROLADOR getProductById
+//CONTROLADOR getProduct by ID
 /*
 ====================================================
 Obtener un producto por su ID
@@ -111,15 +110,27 @@ Ruta: /api/products
 */
 const getProductById = async (req, res) => {
     try {
+        // 1. Obtenemos el ID enviado por el cliente
+        console.log(" [GET BY ID] ID recibido:", req.params.id);
+        // 2. Buscamos el producto en MongoDB
+        console.log(" [GET BY ID] Buscando producto en MongoDB...");
 
         const product = await Product.findById(req.params.id);  //función
 
         if (!product) {
+            console.log("⚠️ [GET BY ID] Producto no encontrado");
             return res.status(404).json({
                 success: false,
                 message: "Producto no encontrado"
             });
         }
+        // 4. Producto encontrado
+        console.log(
+            "✅ [GET BY ID] Producto encontrado:",
+            product.name
+        );
+        // 5. Enviamos la respuesta
+        console.log("📤 [GET BY ID] Enviando producto al cliente");
 
         res.json({
             success: true,
@@ -127,6 +138,10 @@ const getProductById = async (req, res) => {
         });
 
     } catch (error) {
+         console.error(
+            "❌ [GET BY ID] Error al obtener el producto:",
+            error.message
+        );
 
         res.status(500).json({
             success: false,
@@ -146,45 +161,43 @@ Ruta: /api/products    <- Como nota: esas rutas siempre se pondran en la URL par
 */ 
 //CONTROLADOR UPDATE:
 const updateProduct = async (req, res) => {
-    console.log("ID:", req.params.id); // Log en terminal para verificar que llegue el ID a la petición:
-        console.log("BODY:", req.body); // Log en terminal para Verificar que llegue el cuerpo
-
-        const product = await Product.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-        new: true,
-        runValidators: true
-    }
-);
-
-console.log(product);  // Log en termianl para verificar el documento devuelto por Mongoose
-
     try {
+        // 1. Logs de entrada
+        console.log(" [UPDATE] ID recibido:", req.params.id);
+        console.log(" [UPDATE] Datos recibidos para actualizar:", req.body);
 
-        const product = await Product.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {
-                new: true,  //<--- devuelve el documento ya actualizado, no el anterior.
-                runValidators: true   // <--- hace que Mongoose valide los datos actualizados según tu esquema.
-            }
-        );
-
-        if (!product) {
-            return res.status(404).json({
-                success: false,
-                message: "Producto no encontrado"
-            });
-        }
-        // Verificación if, que permite ver si realmente llegan los datos para actualizar,
-        // evitando asi enviar una actualización cuando el cliente envía un cuerpo vacío
+        // 2. Validar que el body no venga vacío antes de consultar la BD
         if (!Object.keys(req.body).length) {
+            console.log("⚠️ [UPDATE] Solicitud rechazada: El cuerpo está vacío");
             return res.status(400).json({
                 success: false,
                 message: "No se enviaron datos para actualizar."
             });
         }
+
+        // 3. Actualización en MongoDB
+        console.log(" [UPDATE] Actualizando producto en MongoDB...");
+        const product = await Product.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {
+                new: true,         // Devuelve el documento ya actualizado
+                runValidators: true // Aplica las validaciones del esquema de Mongoose
+            }
+        );
+
+        // 4. Validar si existe el producto
+        if (!product) {
+            console.log("⚠️ [UPDATE] Producto no encontrado en MongoDB");
+            return res.status(404).json({
+                success: false,
+                message: "Producto no encontrado"
+            });
+        }
+
+        // 5. Confirmación exitosa
+        console.log("✅ [UPDATE] Producto actualizado con éxito:", product.name);
+        console.log(" [UPDATE] Enviando respuesta 200 al cliente");
 
         res.json({
             success: true,
@@ -193,16 +206,16 @@ console.log(product);  // Log en termianl para verificar el documento devuelto p
         });
 
     } catch (error) {
+        // 6. Captura de errores
+        console.error("❌ [UPDATE] Error al actualizar el producto:", error.message);
 
         res.status(500).json({
             success: false,
             message: "Error al actualizar el producto",
             error: error.message
         });
-
     }
 };
-
 /*
 ====================================================
 Elimina un producto existente
@@ -213,15 +226,29 @@ Ruta: /api/products    <- Como nota: esas rutas siempre se pondran en la URL par
 //CONTROLADOR DELETE:
 const deleteProduct = async (req, res) => {
     try {
+        // 1. Obtenemos el ID enviado por el cliente
+        console.log(" [DELETE] ID recibido:", req.params.id);
+
+        // 2. Buscamos y eliminamos el producto
+        console.log(" [DELETE] Buscando producto en MongoDB...");
 
         const product = await Product.findByIdAndDelete(req.params.id);
 
+        // 3. Verificamos si el producto existía
         if (!product) {
+            console.log(" ⚠️ [DELETE] Producto no encontrado");
             return res.status(404).json({
                 success: false,
                 message: "Producto no encontrado"
             });
         }
+        // 4. Confirmamos eliminación
+        console.log(
+            " [DELETE] Producto eliminado:",
+            product.name
+        );
+        // 5. Enviamos respuesta al cliente
+        console.log(" [DELETE] Enviando respuesta al cliente");
 
         res.json({
             success: true,
@@ -229,6 +256,10 @@ const deleteProduct = async (req, res) => {
         });
 
     } catch (error) {
+        console.error(
+            " [DELETE] Error al eliminar el producto:",
+            error.message
+        );
 
         res.status(500).json({
             success: false,
@@ -238,11 +269,6 @@ const deleteProduct = async (req, res) => {
 
     }
 };
-
-// Exportamos las funciones del controlador
-// Más adelante agregaremos:
-// updateProduct()
-// deleteProduct()
 
 //Exportar controladores:
 module.exports = {
